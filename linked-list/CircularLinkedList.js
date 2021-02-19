@@ -46,7 +46,6 @@ class CircularList {
     append(data) {
         const node = new Node(data);
         let current;
-        node
         if (!this.head)
             this.head = node;
         else {
@@ -122,9 +121,8 @@ class CircularList {
 
         for (let i = 0; i < this.length; i++) {
             if (data === current.data)
-                return index;
+                return i;
 
-            index++;
             current = current.next;
         }
 
