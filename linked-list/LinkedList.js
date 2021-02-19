@@ -53,12 +53,12 @@ class LinkedList {
 }
 
 let node1 = new Node(2);
-let node2 = new Node(4);
-node1.next = node2;
-
 let list = new LinkedList(node1);
 
+let node2 = new Node(4);
+list.insert(node2);
 list.printList();
+
 console.log(list.search(4));
 console.log(list.search(3));
 
