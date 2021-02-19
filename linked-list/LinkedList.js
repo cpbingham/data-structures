@@ -8,65 +8,155 @@ class Node {
 class LinkedList {
     constructor(head = null) {
         this.head = head;
+        this.length = head ? 1 : 0;
     }
 
-    printList() {
-        let x = this.head;
-        while (x) {
-            console.log(x.data);
-            x = x.next;
+    // Print Data
+    toString() {
+        let current = this.head,
+        string = '';
+
+        while (current) {
+            string += current.data + '\n';
+            current = current.next;
         }
+
+        return string;
     }
 
-    search(data) {
-        let x = this.head;
-        while (x !== null && x.data !== data) {
-            x = x.next;
+    // Get element at index
+    getElementAt(index) {
+        if (index >= 0 && index <= this.length) {
+            let current = this.head;
+            for (let i = 0; i < index && current; i++)
+                current = current.next;
+            return current;
         }
-        return x;
+        return undefined;
     }
 
-    insert(newNode) {
-        newNode.next = this.head;
-        this.head = newNode;
+    // Add new data to list
+    append(data) {
+        const node = new Node(data);
+        let current;
+        if (!this.head)
+            this.head = node;
+        else {
+            current = this.getElementAt(this.length - 1);
+            current.next = node;
+        }
+
+        this.length++;
     }
 
+    // Insert data at specific index
+    insert(data, index) {
+        if (index >= 0 && index <= this.length) {
+            const node = new Node(data);
+            let current = this.head;
+
+            // Insert at head
+            if (index === 0) {
+                if (this.head === null)
+                    this.head = node;
+                else {
+                    node.next = current;
+                    this.head = node;                
+                }
+            } else {
+                const previous = this.getElementAt(index - 1);
+                node.next = previous.next;
+                previous.next = node;
+            }
+
+            this.length++;
+            return true;
+        }
+        return false;
+    }
+
+    // Remove node at index
+    removeAt(index) {
+        if (index >= 0 && index <= this.length) {
+            let current = this.head;
+
+            // Remove at head
+            if (index === 0) {
+                if (this.length === 1)
+                    this.head = undefined;
+                else 
+                    this.head = this.head.next;
+            } else {
+                const previous = this.getElementAt(index - 1);
+                current = previous.next;
+                previous.next = current.next;
+            }
+
+            this.length--;
+            return current.data;
+        }
+        return undefined;
+    }
+
+    // Get index of data
+    indexOf(data) {
+        let current = this.head,
+        index = 0;
+
+        while (current) {
+            if (data === current.data)
+                return 1;
+            
+            current = current.next;
+        }
+
+        return -1;
+    }
+
+    // Find data in list
+    contains(data) {
+        return this.indexOf(data) !== -1;
+    }
+
+    // Delete data by value
     delete(data) {
-        let x = this.head;
-        if (x.data === data) {
-            this.head = x.next;
-            return;
-        }
+        return this.removeAt(this.indexOf(data));
+    }
 
-        let prev;
-        while (x !== null && x.data !== data) {
-            prev = x;
-            x = x.next;
-        }
+    // Check if empty
+    isEmpty() {
+        return this.length === 0;
+    }
 
-        if (x === null) {
-            return;
-        }
-
-        prev.next = x.next;
+    // Return size of list
+    size() {
+        return this.length;
     }
 }
 
-let node1 = new Node(2);
-let list = new LinkedList(node1);
+let list = new LinkedList();
+list.append(1);
+list.append(2)
+console.log(list.toString());
 
-let node2 = new Node(4);
-list.insert(node2);
-list.printList();
 
-console.log(list.search(4));
-console.log(list.search(3));
+list.insert(1.5, 1);
+console.log(list.toString());
 
-let node3 = new Node(11);
-list.insert(node3);
-list.printList();
+list.insert(0, 0);
+console.log(list.toString());
 
-console.log('')
+list.removeAt(2);
+console.log(list.toString());
+
+list.removeAt(0);
+console.log(list.toString());
+
+console.log(list.indexOf(2));
+console.log(list.indexOf(3));
+
+console.log(list.contains(2));
+console.log(list.contains(3));
 
 list.delete(2);
-list.printList();
+console.log(list.toString());
